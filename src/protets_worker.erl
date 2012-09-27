@@ -21,7 +21,7 @@
 start_link(Name, Opts, Heir) ->
     gen_server:start_link(?MODULE, [Name, Opts, Heir], []).
 
-init([Name, undefined, Heir]) ->
+init([Name, undefined, _Heir]) ->
     {ok, #state{name = Name}};
 init([Name, Opts, Heir]) ->
     try ets:new(Name, build_opts(Name, Opts, Heir)) of
@@ -34,26 +34,26 @@ init([Name, Opts, Heir]) ->
 
 handle_call(get_tref, _From, State) ->
     {reply, {ok, State#state.tref}, State};
-handle_call({renew_heir, Pid}, From, State) ->
+handle_call({renew_heir, Pid}, _From, State) ->
     true = ets:setopts(State#state.tref, [?OPT_HEIR(Pid, State#state.name)]),
     {reply, ok, State};
-handle_call(Msg, _From, State) ->
+handle_call(_Msg, _From, State) ->
     {reply, ignore, State}.
 
 handle_info({'ETS-TRANSFER', Tid, _From, Name}, #state{name = Name} = State) ->
     {noreply, State#state{tref = Tid}};
-handle_info({'ETS-TRANSFER', Tid, _From, Name}, State) ->
+handle_info({'ETS-TRANSFER', Tid, _From, _Name}, State) ->
     true = ets:delete(Tid),
     {noreply, State};
-handle_info(Msg, State) ->
+handle_info(_Msg, State) ->
     {noreply, State}.
 
-handle_cast(terminate_normal, State) ->
+handle_cast(terminate_normal, _State) ->
     exit(normal);
-handle_cast(Msg, State) ->
+handle_cast(_Msg, State) ->
     {noreply, State}.
 
-terminate(Reason, _State) ->
+terminate(_Reason, _State) ->
     ok.
 
 code_change(_OldVersion, State, _Extra) ->

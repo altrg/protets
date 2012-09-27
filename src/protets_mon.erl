@@ -42,7 +42,7 @@ handle_call({drop, Name}, _From, State) ->
             ok
     end,
     {reply, ok, State};
-handle_call(Msg, _From, State) ->
+handle_call(_Msg, _From, State) ->
     {reply, ignore, State}.
 
 handle_info({'ETS-TRANSFER', Tid, From, Name}, State) ->
@@ -50,7 +50,7 @@ handle_info({'ETS-TRANSFER', Tid, From, Name}, State) ->
         {'DOWN', _Ref, process, From, normal} ->
             true = ets:delete(?WORKERS_TABLE, Name),
             true = ets:delete(Tid);
-        {'DOWN', _Ref, process, From, Why} ->
+        {'DOWN', _Ref, process, From, _Why} ->
             Pid = start_worker(Name, undefined),
             Worker = #worker{
                 name = Name,
@@ -64,13 +64,13 @@ handle_info({'ETS-TRANSFER', Tid, From, Name}, State) ->
             exit({partial, 'ETS-TRANSFER'})
     end,
     {noreply, State};
-handle_info(Msg, State) ->
+handle_info(_Msg, State) ->
     {noreply, State}.
 
-handle_cast(Msg, State) ->
+handle_cast(_Msg, State) ->
     {noreply, State}.
 
-terminate(Reason, _State) ->
+terminate(_Reason, _State) ->
     ok.
 
 code_change(_OldVersion, State, _Extra) ->
@@ -86,7 +86,7 @@ init_workers_table(Opts) ->
                 ref = erlang:monitor(process, Pid)
             },
             true = ets:insert(?WORKERS_TABLE, Worker);
-        Pid ->
+        _Pid ->
             ok = ets:foldl(fun renew_heir/2, undefined, ?WORKERS_TABLE)
     end,
     ok.
@@ -121,6 +121,6 @@ stop_worker(Pid) ->
     gen_server:cast(Pid, terminate_normal),
     ok.
 
-renew_heir(Worker, Acc) ->
+renew_heir(Worker, _Acc) ->
     ok = gen_server:call(Worker#worker.pid, {renew_heir, self()}),
     ok.
