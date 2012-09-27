@@ -6,6 +6,7 @@ Protected ETS server
 Usage:
 
 protets:get(foo)            => {ok, TableId}.
+
 protets:get(foo, [Opt])     => {ok, TableId}.
 
 protets:drop(foo)           => ok.
