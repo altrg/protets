@@ -12,6 +12,7 @@ get(Name, Opts) when is_list(Opts) ->
 
 %% drops table by it's name
 drop(?WORKERS_TABLE) ->
+    ?WARNING("Attempt to drop service table, denied"),
     {error, denied};
 drop(Name) ->
     gen_server:call(protets_mon, {drop, Name}).

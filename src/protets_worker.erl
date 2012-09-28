@@ -77,13 +77,8 @@ code_change(_OldVersion, State, _Extra) ->
 build_opts(Name, Opts, Heir) ->
     [?OPT_ACCESS, ?OPT_HEIR(Heir, Name)] ++ lists:filter(fun allowed_opt/1, Opts).
 
-allowed_opt(set)                    -> true;
-allowed_opt(ordered_set)            -> true;
-allowed_opt(bag)                    -> true;
-allowed_opt(duplicate_bag)          -> true;
-allowed_opt({keypos, _})            -> true;
-allowed_opt({write_concurrency, _}) -> true;
-allowed_opt({read_concurrency, _})  -> true;
-allowed_opt(compressed)             -> true;
-allowed_opt(named_table)            -> true;
-allowed_opt(_)                      -> false.
+allowed_opt(public)                 -> false;
+allowed_opt(protected)              -> false;
+allowed_opt(private)                -> false;
+allowed_opt({heir, _, _})           -> false;
+allowed_opt(_)                      -> true.

@@ -5,4 +5,5 @@
               {applications,[kernel,stdlib]},
               {mod,{protets_app,[]}},
               {env,[]},
-              {modules,[protets_app,protets_sup]}]}.
+              {modules,[protets,protets_app,protets_mon,protets_sup,
+                        protets_supersup,protets_worker]}]}.

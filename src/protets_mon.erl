@@ -72,6 +72,7 @@ handle_info({'ETS-TRANSFER', Tid, From, Name}, State) ->
         5000 ->
             %% something really wrong here,
             %% ETS-TRANSFER without worker termination
+            ?ERROR("Partial transfer happened"),
             exit({partial, 'ETS-TRANSFER'})
     end,
     {noreply, State};
