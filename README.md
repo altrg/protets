@@ -51,6 +51,11 @@ Usage
 I'll try to show you some:
 
 ```erlang
+shizz@shizz-worktop:/projects/protets:master # make
+...
+Erlang R15B02 (erts-5.9.2) [source] [64-bit] [smp:4:4] [async-threads:0] [hipe] [kernel-poll:false]
+Eshell V5.9.2  (abort with ^G)
+
 (protets@shizz-worktop)1> self().
 <0.219.0>
 

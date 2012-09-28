@@ -10,4 +10,4 @@
 -define(INFO(Msg, Params),
     error_logger:info_msg("[~p] " ++ Msg, [?MODULE | Params])).
 
--define(SERVICE_TABLE, '$protets_ets$').
+-define(WORKERS_TABLE, '$protets_ets$').
